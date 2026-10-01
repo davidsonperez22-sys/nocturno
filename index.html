@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NOCTURNO, tu plataforma de películas y entretenimiento.">
+  <title>NOCTURNO | Películas</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Ir al inicio de NOCTURNO">NOCTURNO</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+    <nav class="main-nav" id="mainNav">
+      <a class="active" href="index.html">Inicio</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#mi-lista">Mi lista</a>
+      <a id="adminLink" class="hidden" href="admin.html">Administración</a>
+    </nav>
+    <div class="header-actions">
+      <span id="userLabel" class="user-label"></span>
+      <div id="authActions"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="hero" aria-label="Película destacada">
+      <div class="hero-content">
+        <span class="eyebrow">NOCTURNO ORIGINAL</span>
+        <h1 id="heroTitle">Descubre tu próxima historia</h1>
+        <p id="heroDescription">Inicia sesión para explorar el catálogo de películas.</p>
+        <div class="button-row">
+          <a id="heroWatch" class="btn btn-primary" href="login.html">▶ Ver ahora</a>
+          <button id="heroInfo" class="btn btn-secondary" type="button">Más info</button>
+        </div>
+      </div>
+      <div class="hero-overlay"></div>
+    </section>
+
+    <section class="content-section" id="catalogo">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">EXPLORA</span>
+          <h2>Catálogo nocturno</h2>
+        </div>
+        <div class="catalog-tools">
+          <label class="search-box">
+            <span>⌕</span>
+            <input id="searchInput" type="search" placeholder="Buscar películas..." autocomplete="off">
+          </label>
+          <select id="genreFilter" aria-label="Filtrar por género">
+            <option value="all">Todos los géneros</option>
+          </select>
+        </div>
+      </div>
+      <div id="catalogMessage" class="notice hidden"></div>
+      <div id="movieSections"></div>
+    </section>
+
+    <section class="content-section" id="mi-lista">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">TU ESPACIO</span>
+          <h2>Mi lista</h2>
+        </div>
+      </div>
+      <div id="favoritesGrid" class="movie-grid compact-grid"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/movies.js"></script>
+</body>
+</html>
