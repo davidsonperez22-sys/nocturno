@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Panel de administración de NOCTURNO.">
+  <title>Administración | NOCTURNO</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="admin">
+  <header class="site-header">
+    <a class="brand" href="index.html">NOCTURNO</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Ver sitio</a>
+      <a class="active" href="admin.html">Administración</a>
+    </nav>
+    <div class="header-actions">
+      <span id="userLabel" class="user-label"></span>
+      <div id="authActions"></div>
+    </div>
+  </header>
+
+  <main class="admin-page">
+    <div id="adminLoading" class="loading-state"><span class="spinner"></span> Verificando permisos...</div>
+    <section id="adminPanel" class="hidden">
+      <div class="page-heading">
+        <div>
+          <span class="eyebrow">CONTROL CENTRAL</span>
+          <h1>Panel de administración</h1>
+          <p>Gestiona el catálogo, los usuarios y la identidad visual de NOCTURNO.</p>
+        </div>
+      </div>
+
+      <div class="admin-tabs" role="tablist">
+        <button class="admin-tab active" data-tab="moviesTab" type="button">Películas</button>
+        <button class="admin-tab" data-tab="usersTab" type="button">Usuarios</button>
+        <button class="admin-tab" data-tab="settingsTab" type="button">Configuración</button>
+      </div>
+
+      <section id="moviesTab" class="admin-tab-panel active">
+        <div class="admin-grid">
+          <form id="movieForm" class="panel-card" novalidate>
+            <div class="panel-heading">
+              <div><span class="eyebrow">CATÁLOGO</span><h2 id="movieFormTitle">Agregar película</h2></div>
+              <button id="cancelEdit" class="text-button hidden" type="button">Cancelar edición</button>
+            </div>
+            <input id="movieId" type="hidden">
+            <div class="form-group"><label for="movieTitle">Título</label><input id="movieTitle" required type="text"></div>
+            <div class="form-group"><label for="movieSynopsis">Sinopsis</label><textarea id="movieSynopsis" required rows="4"></textarea></div>
+            <div class="two-columns">
+              <div class="form-group"><label for="movieYear">Año</label><input id="movieYear" required min="1888" max="2100" type="number"></div>
+              <div class="form-group"><label for="movieDuration">Duración</label><input id="movieDuration" required placeholder="2h 05min" type="text"></div>
+            </div>
+            <div class="form-group"><label for="movieGenre">Género</label><input id="movieGenre" required placeholder="Acción, Drama" type="text"></div>
+            <div class="form-group"><label for="moviePoster">URL del póster</label><input id="moviePoster" required type="url" placeholder="https://..."></div>
+            <div class="form-group"><label for="movieBanner">URL del banner/fondo</label><input id="movieBanner" required type="url" placeholder="https://..."></div>
+            <div class="form-group"><label for="movieLink">URL de la película</label><input id="movieLink" required type="url" placeholder="https://..."></div>
+            <div class="form-group"><label for="movieTrailer">URL del tráiler</label><input id="movieTrailer" type="url" placeholder="https://youtube.com/watch?v=..."></div>
+            <label class="checkbox-label"><input id="movieFeatured" type="checkbox"> <span>Usar como película destacada</span></label>
+            <div id="movieFormMessage" class="form-message hidden"></div>
+            <button class="btn btn-primary btn-block" type="submit">Guardar película</button>
+          </form>
+
+          <div class="panel-card">
+            <div class="panel-heading"><div><span class="eyebrow">CONTENIDO</span><h2>Películas guardadas</h2></div></div>
+            <div id="adminMoviesList" class="admin-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="usersTab" class="admin-tab-panel">
+        <div class="panel-card">
+          <div class="panel-heading"><div><span class="eyebrow">CUENTAS</span><h2>Gestión de usuarios</h2></div></div>
+          <div id="usersList" class="admin-table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="settingsTab" class="admin-tab-panel">
+        <form id="settingsForm" class="panel-card settings-card" novalidate>
+          <div class="panel-heading"><div><span class="eyebrow">IDENTIDAD VISUAL</span><h2>Configuración del sitio</h2></div></div>
+          <p class="muted">Estas imágenes aparecen como fondo global y banner principal cuando no hay una película destacada.</p>
+          <div class="form-group"><label for="globalBanner">URL del banner principal</label><input id="globalBanner" type="url" placeholder="https://..."></div>
+          <div class="form-group"><label for="globalBackground">URL del fondo global</label><input id="globalBackground" type="url" placeholder="https://..."></div>
+          <div id="settingsMessage" class="form-message hidden"></div>
+          <button class="btn btn-primary" type="submit">Guardar configuración</button>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
