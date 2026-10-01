@@ -1,0 +1,16 @@
+# Configuración local y archivos del sistema
+.env
+.env.*
+.DS_Store
+Thumbs.db
+
+# Firebase CLI / emuladores
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Editores
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
