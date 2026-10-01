@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 210" role="img" aria-labelledby="title desc">
+  <title id="title">NOCTURNO</title>
+  <desc id="desc">Luna creciente con carrete de película y símbolo de reproducción</desc>
+  <defs>
+    <linearGradient id="violet" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset=".55" stop-color="#4338ca"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient>
+    <linearGradient id="silver" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#cbd5e1"/><stop offset="1" stop-color="#64748b"/></linearGradient>
+  </defs>
+  <g transform="translate(18 12)">
+    <path d="M157 16c-35-23-83-19-112 13C4 70 11 137 54 170c31 24 72 27 106 9-37-8-64-38-64-75 0-40 25-75 61-88z" fill="url(#violet)"/>
+    <path d="M168 23c-33 13-56 44-56 81 0 43 30 79 70 88 24-16 39-41 42-69-15 21-39 34-66 34-45 0-82-36-82-81 0-20 7-38 18-52 22-15 47-16 74-1z" fill="#090916" opacity=".85"/>
+    <circle cx="118" cy="105" r="49" fill="url(#silver)" stroke="#eef2ff" stroke-width="3"/>
+    <circle cx="118" cy="105" r="17" fill="#0b0b18"/><circle cx="118" cy="73" r="9" fill="#0b0b18"/><circle cx="145" cy="94" r="9" fill="#0b0b18"/><circle cx="136" cy="126" r="9" fill="#0b0b18"/><circle cx="100" cy="132" r="9" fill="#0b0b18"/><circle cx="91" cy="97" r="9" fill="#0b0b18"/>
+    <path d="m118 81 34 24-34 24z" fill="url(#violet)" stroke="#f8fafc" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M50 44 54 53l9 4-9 4-4 9-4-9-9-4 9-4zM35 88l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff"/>
+  </g>
+  <text x="214" y="137" fill="url(#silver)" font-family="Arial, Helvetica, sans-serif" font-size="70" font-weight="700" letter-spacing="7">NOCTURNO</text>
+  <rect x="218" y="155" width="455" height="5" rx="2.5" fill="url(#violet)" opacity=".85"/>
+</svg>
