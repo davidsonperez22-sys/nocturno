@@ -1,0 +1,56 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.rol == 'admin'
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.bloqueado != true;
+    }
+
+    match /users/{userId} {
+      // Un usuario puede consultar su perfil; un admin puede consultar todos.
+      allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
+
+      // El documento se crea con el mismo UID autenticado y rol user.
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.rol == 'user'
+        && request.resource.data.bloqueado == false;
+
+      // Cada usuario puede actualizar sus propios datos, pero nunca su rol,
+      // UID o estado de bloqueo. Solo un admin puede administrar otros usuarios.
+      allow update: if signedIn() && (
+        (
+          request.auth.uid == userId
+          && request.resource.data.uid == resource.data.uid
+          && request.resource.data.rol == resource.data.rol
+          && request.resource.data.bloqueado == resource.data.bloqueado
+        )
+        || (isAdmin() && request.auth.uid != userId)
+      );
+
+      allow delete: if isAdmin() && request.auth.uid != userId;
+    }
+
+    // El catálogo solo se expone a usuarios autenticados. Las escrituras son del admin.
+    match /movies/{movieId} {
+      allow read: if signedIn() && !isBlocked();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /settings/{settingId} {
+      allow read: if signedIn() && !isBlocked();
+      allow write: if isAdmin();
+    }
+
+    function isBlocked() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.bloqueado == true;
+    }
+  }
+}
