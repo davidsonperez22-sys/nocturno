@@ -12,10 +12,11 @@ export function readableAuthError(error) {
     'auth/email-already-in-use': 'Este correo ya está registrado.',
     'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
     'auth/invalid-email': 'Escribe un correo electrónico válido.',
+    'auth/operation-not-allowed': 'Este método de registro todavía no está habilitado en Firebase.',
     'auth/popup-closed-by-user': 'Se cerró la ventana de Google.',
     'auth/popup-blocked': 'El navegador bloqueó la ventana de Google.',
     'auth/network-request-failed': 'No hay conexión con Firebase.',
-    'permission-denied': 'No tienes permisos para realizar esta acción.'
+    'permission-denied': 'Firebase rechazó el acceso a los datos. Revisa las reglas de Firestore.'
   };
   return messages[error && error.code] || (error && error.message) || 'Ocurrió un error. Inténtalo de nuevo.';
 }
@@ -92,35 +93,63 @@ function initLogin() {
   const form = document.querySelector('#authForm');
   if (!form) return;
   let register = false;
-  const nameField = document.querySelector('#nameField');
+  const nameInput = form.elements.namedItem('name');
+  const emailInput = form.elements.namedItem('email');
+  const passwordInput = form.elements.namedItem('password');
   const title = document.querySelector('#authTitle');
   const subtitle = document.querySelector('#authSubtitle');
   const submit = document.querySelector('#authSubmit');
   const toggle = document.querySelector('#modeToggle');
   function mode() {
     document.body.dataset.authMode = register ? 'register' : 'login';
-    nameField.classList.toggle('hidden', !register);
+    document.querySelector('#nameField').classList.toggle('hidden', !register);
     title.textContent = register ? 'Crea tu cuenta' : 'Inicia sesión';
     subtitle.textContent = register ? 'Guarda tus favoritas y disfruta la noche.' : 'Continúa disfrutando tus películas favoritas.';
     submit.textContent = register ? 'Crear cuenta' : 'Iniciar sesión';
     toggle.textContent = register ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate';
+    nameInput.required = register;
   }
   form.addEventListener('submit', async function(event) {
     event.preventDefault();
     authMessage('');
-    if (!form.checkValidity() || (register && form.name.value.trim().length < 2)) { authMessage('Completa correctamente todos los campos.'); form.reportValidity(); return; }
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    if (!form.checkValidity() || (register && name.length < 2)) {
+      authMessage('Completa correctamente todos los campos.');
+      form.reportValidity();
+      return;
+    }
     try {
       assertFirebaseConfigured();
       submit.disabled = true;
+      submit.textContent = register ? 'Creando cuenta...' : 'Ingresando...';
       await setPersistence(auth, browserLocalPersistence);
-      if (register) { const result = await createUserWithEmailAndPassword(auth, form.email.value.trim(), form.password.value); await ensureUserDocument(result.user, { nombre: form.name.value.trim() }); }
-      else { await signInWithEmailAndPassword(auth, form.email.value.trim(), form.password.value); }
+      if (register) {
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+        await ensureUserDocument(result.user, { nombre: name });
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+      }
       window.location.href = 'index.html';
-    } catch (error) { authMessage(readableAuthError(error)); submit.disabled = false; }
+    } catch (error) {
+      console.error(error);
+      authMessage(readableAuthError(error));
+      submit.disabled = false;
+      submit.textContent = register ? 'Crear cuenta' : 'Iniciar sesión';
+    }
   });
   document.querySelector('#googleButton').addEventListener('click', async function() {
-    try { assertFirebaseConfigured(); await setPersistence(auth, browserLocalPersistence); const result = await signInWithPopup(auth, googleProvider); await ensureUserDocument(result.user); window.location.href = 'index.html'; }
-    catch (error) { authMessage(readableAuthError(error)); }
+    try {
+      assertFirebaseConfigured();
+      await setPersistence(auth, browserLocalPersistence);
+      const result = await signInWithPopup(auth, googleProvider);
+      await ensureUserDocument(result.user);
+      window.location.href = 'index.html';
+    } catch (error) {
+      console.error(error);
+      authMessage(readableAuthError(error));
+    }
   });
   toggle.addEventListener('click', function() { register = !register; mode(); });
   mode();
